@@ -1,0 +1,60 @@
+name: Reusable Pages Deploy
+
+on:
+  workflow_call:
+    inputs:
+      project_name:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string
+      pnpm_version:
+        required: true
+        type: string
+      node_version:
+        required: true
+        type: string
+      dist_path:
+        required: true
+        type: string
+    secrets:
+      CLOUDFLARE_API_TOKEN:
+        required: true
+      CLOUDFLARE_ACCOUNT_ID:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ inputs.pnpm_version }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node_version }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm run build
+        env:
+          VITE_API_BASE: ${{ vars.VITE_API_BASE }}
+          VITE_APP_TITLE: ${{ vars.VITE_APP_TITLE }}
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: >-
+            pages deploy "${{ inputs.dist_path }}"
+            --project-name "${{ inputs.project_name }}"
