@@ -50,7 +50,7 @@ jobs:
 
       - name: Ensure wrangler (pnpm workspace)
         if: hashFiles('pnpm-workspace.yaml') != ''
-        run: pnpm add -D wrangler@latest -w --allow-build=workerd
+        run: pnpm add -D wrangler@latest -w --allow-build=*
         env:
           WRANGLER_LOG: warn
 
