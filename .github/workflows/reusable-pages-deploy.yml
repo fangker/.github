@@ -48,6 +48,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Ensure wrangler (pnpm workspace)
+        if: hashFiles('pnpm-workspace.yaml') != ''
+        run: pnpm add -D wrangler@3.90.0 -w
+        env:
+          WRANGLER_LOG: warn
+
       - name: Build
         run: ${{ inputs.build_command }}
         env:
@@ -59,6 +65,8 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "3.90.0"
+          packageManager: pnpm
           command: >-
             pages deploy "${{ inputs.dist_path }}"
             --project-name "${{ inputs.project_name }}"
