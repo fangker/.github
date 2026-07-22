@@ -50,7 +50,7 @@ jobs:
 
       - name: Ensure wrangler (pnpm workspace)
         if: hashFiles('pnpm-workspace.yaml') != ''
-        run: pnpm add -D wrangler@3.90.0 -w --allow-build=workerd
+        run: pnpm add -D wrangler@latest -w --allow-build=workerd
         env:
           WRANGLER_LOG: warn
 
@@ -65,7 +65,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          wranglerVersion: "3.90.0"
+          wranglerVersion: "4.113.0"
           packageManager: pnpm
           command: >-
             pages deploy "${{ inputs.dist_path }}"
