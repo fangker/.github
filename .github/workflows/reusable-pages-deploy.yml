@@ -60,7 +60,7 @@ jobs:
       - name: Build
         run: ${{ inputs.build_command }}
         env:
-          VITE_API_BASE: ${{ vars.VITE_API_BASE }}
+          VITE_GLOB_API_URL: ${{ vars.VITE_GLOB_API_URL }}
           VITE_APP_TITLE: ${{ vars.VITE_APP_TITLE }}
 
       - name: Deploy to Cloudflare Pages
