@@ -48,19 +48,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Ensure wrangler (pnpm workspace)
-        if: hashFiles('pnpm-workspace.yaml') != ''
-        run: |
-          # 版本必须与下方 wrangler-action 的 wranglerVersion 完全一致;不一致时 action 会
-          # 判定 "incompatible" 并不带 -w 重装 → pnpm workspace 报 ERR_PNPM_ADDING_TO_ROOT
-          pnpm add -D wrangler@4.113.0 -w \
-            --allow-build=esbuild \
-            --allow-build=sharp \
-            --allow-build=workerd \
-            --allow-build=unrs-resolver
-        env:
-          WRANGLER_LOG: warn
-
       - name: Build
         run: ${{ inputs.build_command }}
         env:
