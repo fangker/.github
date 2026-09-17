@@ -22,6 +22,26 @@ on:
         required: false
         type: string
         default: "pnpm run build"
+      branch:
+        description: "Branch name to pass to \`wrangler pages deploy --branch\`. Empty = omit flag (Wrangler falls back to checkout's branch ref, or literal 'HEAD' in detached HEAD)."
+        required: false
+        type: string
+        default: ""
+      commit_hash:
+        description: "Commit SHA to pass to \`wrangler pages deploy --commit-hash\`. Empty = omit flag."
+        required: false
+        type: string
+        default: ""
+      commit_message:
+        description: "Commit message to pass to \`wrangler pages deploy --commit-message\`. Empty = omit flag."
+        required: false
+        type: string
+        default: ""
+      commit_dirty:
+        description: "Whether the workspace is dirty. Pass 'true' or 'false'. Empty = omit flag (Wrangler will refuse to deploy on dirty workspace by default)."
+        required: false
+        type: string
+        default: ""
     secrets:
       CLOUDFLARE_API_TOKEN:
         required: true
@@ -64,3 +84,7 @@ jobs:
           command: >-
             pages deploy "${{ inputs.dist_path }}"
             --project-name "${{ inputs.project_name }}"
+            ${{ inputs.branch && format('--branch {0}', inputs.branch) || '' }}
+            ${{ inputs.commit_hash && format('--commit-hash {0}', inputs.commit_hash) || '' }}
+            ${{ inputs.commit_message && format('--commit-message {0}', inputs.commit_message) || '' }}
+            ${{ inputs.commit_dirty && format('--commit-dirty {0}', inputs.commit_dirty) || '' }}
