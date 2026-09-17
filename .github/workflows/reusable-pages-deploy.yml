@@ -80,7 +80,7 @@ jobs:
           command: >-
             pages deploy "${{ inputs.dist_path }}"
             --project-name "${{ inputs.project_name }}"
-            ${{ inputs.branch && format('--branch {0}', inputs.branch) }}
-            ${{ inputs.commit_hash && format('--commit-hash {0}', inputs.commit_hash) }}
-            ${{ inputs.commit_message && format('--commit-message {0}', inputs.commit_message) }}
+            ${{ inputs.branch && format('--branch "{0}"', inputs.branch) }}
+            ${{ inputs.commit_hash && format('--commit-hash "{0}"', inputs.commit_hash) }}
+            ${{ inputs.commit_message && format('--commit-message "{0}"', inputs.commit_message) }}
             ${{ inputs.commit_dirty && format('--commit-dirty {0}', inputs.commit_dirty) }}
